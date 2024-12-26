@@ -1,8 +1,11 @@
 from chatterbot import ChatBot
-from chatterbot.trainers import ListTrainer
+from chatterbot.trainers import ListTrainer, ChatterBotCorpusTrainer
 import spacy
+from flask import Flask, render_template
 
-spacy_nlp = spacy.load("en_core_web_sm")
+app = Flask(__name__)
+
+#spacy_nlp = spacy.load("en_core_web_sm")
 
 bot = ChatBot(
     "chat-bot",
@@ -14,20 +17,16 @@ bot = ChatBot(
             "maximum_similarity_threshold":0.9
             }
         ],
-    spacy_nlp=spacy_nlp
+    #spacy_nlp=spacy_nlp
 )
 
-list_to_train = [
-    "Hi",
-    "Hi There",
-    "What's your name?",
-    "I'm a chatbot.",
-    "How old are you?",
-    "I don't age. I'm just an assistant.",
-]
+trainer = ChatterBotCorpusTrainer(bot)
+trainer.train("chatterbot.corpus.english")
 
-list_trainer = ListTrainer(bot)
-list_trainer.train(list_to_train)
+
+@app.route("/")
+def main():
+    return render_template("index.html")
 
 print("Enter ex to terminate.")
 check = True
@@ -37,3 +36,6 @@ while check:
         check = False
         break
     print("Chat-Bot: " + str(bot.get_response(user_question)))
+    
+if __name__ == "__main__":
+    app.run(debug=True)
