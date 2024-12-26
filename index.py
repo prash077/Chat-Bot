@@ -2,15 +2,19 @@ from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 import spacy
 
-# Load the SpaCy language model
 spacy_nlp = spacy.load("en_core_web_sm")
 
-# Create a ChatBot instance
 bot = ChatBot(
     "chat-bot",
     read_only=False,
-    logic_adapters=["chatterbot.logic.BestMatch"],
-    spacy_nlp=spacy_nlp  # Pass the loaded model
+    logic_adapters=[
+        {
+            "import_path":"chatterbot.logic.BestMatch",
+            "default_response":"Sorry i don't have any answer",
+            "maximum_similarity_threshold":0.9
+            }
+        ],
+    spacy_nlp=spacy_nlp
 )
 
 list_to_train = [
@@ -22,7 +26,6 @@ list_to_train = [
     "I don't age. I'm just an assistant.",
 ]
 
-# Train the bot
 list_trainer = ListTrainer(bot)
 list_trainer.train(list_to_train)
 
