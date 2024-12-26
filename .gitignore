@@ -1,2 +1,4 @@
 # Virtual environment
 envo/
+
+db.sqlite3
