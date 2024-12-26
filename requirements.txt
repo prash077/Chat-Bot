@@ -1,0 +1,7 @@
+chatterbot
+chatterbot-corpus
+pyyaml 
+python3 -m spacy downlaod en
+spacy
+jupyter
+flask
