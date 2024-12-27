@@ -2,3 +2,4 @@
 envo/
 
 db.sqlite3
+.env
