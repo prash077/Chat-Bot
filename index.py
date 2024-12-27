@@ -1,7 +1,7 @@
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer, ChatterBotCorpusTrainer
 import spacy
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -28,14 +28,19 @@ trainer.train("chatterbot.corpus.english")
 def main():
     return render_template("index.html")
 
-print("Enter ex to terminate.")
-check = True
-while check:
-    user_question = input("User: ")
-    if user_question == "ex":
-        check = False
-        break
-    print("Chat-Bot: " + str(bot.get_response(user_question)))
+# print("Enter ex to terminate.")
+# check = True
+# while check:
+#     user_question = input("User: ")
+#     if user_question == "ex":
+#         check = False
+#         break
+#     print("Chat-Bot: " + str(bot.get_response(user_question)))
+
+@app.route("/get")
+def get_chatbot_response():
+    userText = request.args.get('UserInputMessage')
+    return str(bot.get_response(userText))
     
 if __name__ == "__main__":
     app.run(debug=True)

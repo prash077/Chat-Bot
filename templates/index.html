@@ -5,108 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Chat-Bot</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <style>
-        body {
-            background-color: #000;
-            color: #00ff00;
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        body{
+            font-family:monospace;
+        }
+        #chatbox{
+            margin-left:auto;
+            margin-right:auto;
+            width:40%;
+            margin-top:50px;
+        }
+        .fieldArea{
+            font-family:monospace;
+            font-size:16px;
+            text-align:left;
+            line-height:25px;
+            color:blue;
+        }
+        #inputField{
+            margin-left:auto;
+            margin-right:auto;
+            margin-top:50px;
+            width:80%;
+            text-align:center;
+        }
+        #inputMessage{
+            border-button:3px solid #657889;
+            font-family:monospace;
+            font-size:16px;
+        }
+        #Inputbutton{
+            padding:5px;
+            font-family:monospace;
+            font-size:16px;
+        }
+        h1{
+            text-align:center;
+        }
+        .userText{
+            text-align:right;
         }
 
-        h1 {
-            font-size: 3rem;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
-            margin-bottom: 20px;
-        }
-
-        #chatbox {
-            background-color: #111;
-            border: 2px solid #00ff00;
-            border-radius: 5px;
-            width: 80%;
-            max-width: 600px;
-            height: 30px;
-            overflow-y: auto;
-            padding: 10px;
-            box-shadow: 0 0 20px #00ff00;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .fieldArea {
-            margin: 5px 0;
-        }
-
-        .fieldArea spam {
-            display: block;
-            color: #00ff00;
-        }
-
-        #input-container {
-            width: 80%;
-            max-width: 600px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        input[type="text"] {
-            background-color: #111;
-            color: #00ff00;
-            border: 2px solid #00ff00;
-            border-radius: 3px;
-            padding: 10px;
-            flex: 1;
-            margin-right: 10px;
-            box-shadow: inset 0 0 10px #00ff00;
-        }
-
-        input[type="text"]::placeholder {
-            color: #00ff00;
-            opacity: 0.8;
-        }
-
-        input[type="submit"] {
-            background-color: #00ff00;
-            color: #000;
-            border: none;
-            border-radius: 3px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-shadow: 0 0 5px #000;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            box-shadow: 0 0 10px #00ff00;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #000;
-            color: #00ff00;
-            border: 2px solid #00ff00;
-        }
-
-        input[type="submit"]:active {
-            box-shadow: inset 0 0 10px #00ff00;
-        }
+        
     </style>
+    
 </head>
 <body>
     <h1>Chat-Bot</h1>
-    <div id="chatbox">
-        <p class="fieldArea"><spam>Hi There!</spam></p>
+    <div>
+        <div id="chatbox">
+            <p class="fieldArea"><spam>Hi There!</spam></p>
+        </div>
+        <div id="inputField">
+            <input id="inputMessage" type="text" name="UserInputMessage" placeholder="Type the text Here...."/>
+            <input id="Inputbutton" value="Send" type="submit" />
+        </div>
     </div>
-    <div id="input-container">
-        <input id="inputMessage" type="text" name="UserInputMessage" placeholder="Type the text here..." />
-        <input id="Inputbutton" value="Send" type="submit" />
-    </div>
+    <script>
+        function getUserInput()
+        {
+            var user_Input = $('#inputMessage').val();
+            var user_html = "<p class='userText'>User:<spam>"+user_Input+"</spam></p>";
+            $('#inputMessage').val("");
+            $('#chatbox').append(user_html);
+            document.getElementById("inputField").scrollIntoView({block:'start',behaviour:'smooth'});
+            $.get("/get",{UserInputMessage:user_Input}).done(function(data){
+                var data_html = "<p class='fieldArea'>Chatbot: <spam>"+data+"</spam></p>"
+                $('#chatbox').append(data_html);
+            });
+        }
+        $('#inputMessage').keypress(function(e){
+            if(e.which == 13)
+            {
+                getUserInput();
+            }
+        });
+        $('#Inputbutton').click(function(){
+            getUserInput();
+        });
+
+    </script>
 </body>
 </html>
